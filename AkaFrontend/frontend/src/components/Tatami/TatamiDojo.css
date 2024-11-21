@@ -1,0 +1,7 @@
+h3.dojo {
+    position: relative;
+    font-size: 3cqw;
+    cursor:default;
+    user-select: none;
+    margin-top: -10%;
+}

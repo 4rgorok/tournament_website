@@ -1,0 +1,12 @@
+h2.category {
+    font-size: 6cqw;
+    margin: 0;
+    padding: 0;
+    text-align:center;
+    color: black;
+    cursor:default;
+    user-select: none;
+    padding-top:6cqh;
+}
+
+
