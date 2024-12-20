@@ -58,10 +58,19 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
 ]
 
-CORS_ORIGIN_ALLOW_ALL = False
-CORS_ORIGIN_WHITELIST = (
-  'http://localhost:3000',
-)
+ALLOWED_HOSTS = ["*"]
+
+CORS_ALLOW_HEADERS = [
+    "Authorization",
+    "Content-Type"
+]
+
+CORS_ALLOW_ALL_ORIGINS = True
+
+#CORS_ORIGIN_WHITELIST = [
+#    'http://localhost:3000',
+#    'http://192.168.0.107:3000'
+#]
 
 ROOT_URLCONF = 'AkaServer.urls'
 

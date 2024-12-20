@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { BASE_URL } from "../../utils";
 import axios from 'axios';
 
 import './TatamiContestant.css';
@@ -8,7 +9,7 @@ const TatamiContestant = ({ id, color, fight, type }) => {
 
     useEffect(() => {
         if(fight > 0){
-            axios.get('http://localhost:8000/api/contestant', {
+            axios.get(BASE_URL+'/api/contestant', {
                 params: {fid: fight, type: type},
             }
             )
@@ -16,7 +17,7 @@ const TatamiContestant = ({ id, color, fight, type }) => {
             .catch(error => console.error('Error fetching data:', error));
         }
         else{
-            axios.get('http://localhost:8000/api/contestant', {
+            axios.get(BASE_URL+'/api/contestant', {
                 params: {id: id},
             }
             )

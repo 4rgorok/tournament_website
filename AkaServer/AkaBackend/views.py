@@ -90,3 +90,12 @@ class SetupListView(APIView):
         items = Setup.objects.all()
         serializer = SetupSerializer(items, many=True)
         return Response(serializer.data)
+    
+class KumitetournamentListView(APIView):
+    def get(self, request):
+        items = Kumitetournament.objects.all()
+        if 'gid' in request.GET:
+            gid = request.GET['gid']
+            items = Kumitetournament.objects.filter(idgroup=gid)
+        serializer = KumitetournamentSerializer(items, many=True)
+        return Response(serializer.data)

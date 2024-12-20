@@ -21,9 +21,10 @@ from AkaBackend.views import *
 urlpatterns = [
     path("api/tatami", TatamiListView.as_view(), name='tatami-list'),
     path("api/kata", KataListView.as_view(), name='kata-list'),
-        path("api/kumite", KumiteListView.as_view(), name='kumite-list'),
+    path("api/kumite", KumiteListView.as_view(), name='kumite-list'),
     path("api/dojo", DojoListView.as_view(), name='dojo-list'),
     path("api/setup", SetupListView.as_view(), name='setup-list'),
     path("api/contestant", ContestantListView.as_view(), name='contestant-list'),
+    path("api/kumitetournament", KumitetournamentListView.as_view(), name='kumitetournament-list'),
     path('admin/', admin.site.urls),
 ]

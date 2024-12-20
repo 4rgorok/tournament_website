@@ -7,11 +7,13 @@ import TatamiTurniej from './TatamiTurniej';
 import './TatamiList.css';
 import axios from 'axios';
 
+import { BASE_URL } from "../../utils";
+
 const TatamiList = () => {
     const [tatamis, setItems] = useState([]);
 
     useEffect(() => {
-        axios.get('http://localhost:8000/api/tatami')
+        axios.get(BASE_URL+'/api/tatami')
             .then(response => setItems(response.data))
             .catch(error => console.error('Error fetching data:', error));
     }, []);

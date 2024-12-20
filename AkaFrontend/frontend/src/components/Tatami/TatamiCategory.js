@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { BASE_URL } from "../../utils";
 import axios from 'axios';
 
 import './TatamiCategory.css';
@@ -8,7 +9,7 @@ const TatamiCategory = ({ id, type }) => {
 
     useEffect(() => {
         if(type == 'kata'){
-            axios.get('http://localhost:8000/api/kata', {
+            axios.get(BASE_URL+'/api/kata', {
                 params: {uid: id},
             }
             )
@@ -17,7 +18,7 @@ const TatamiCategory = ({ id, type }) => {
         
         }
         else if(type == 'kumite'){
-            axios.get('http://localhost:8000/api/kumite', {
+            axios.get(BASE_URL+'/api/kumite', {
                 params: {fid: id},
             }
             )

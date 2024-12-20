@@ -3,11 +3,13 @@ import axios from 'axios';
 
 import './TatamiTurniej.css';
 
+import { BASE_URL } from "../../utils";
+
 const TatamiTurniej = () => {
     const [turniej, setItems] = useState([]);
 
     useEffect(() => { 
-        axios.get('http://localhost:8000/api/setup')
+        axios.get(BASE_URL+'/api/setup')
             .then(response => setItems(response.data))
             .catch(error => console.error('Error fetching data:', error));
     }, []);

@@ -1,3 +1,94 @@
-p{
-    size: 10px;
+
+.record{
+    
+    border: solid 2px rgba(211, 220, 50, .6);
+    display: flex;
+    color: black;
+    height: 40%;
+}
+
+.win{
+    color:black;
+}
+
+.loose{
+    color:#2b2928
+}
+
+.record:hover{
+    
+}
+
+.matchNumber{
+    text-align: center;
+    margin: auto;
+}
+
+.outerPlayer{
+    width: 85%;
+    margin:auto;
+}
+
+.outerScore{
+    width: 15%;
+    border-left: solid 1px;
+}
+
+.innerScore{
+    width: 100%;
+    height: 100%;
+    margin-top: 10%;
+    text-align: center;
+}
+
+.outerMatch{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    color: #ffffff;
+    width: 100%;
+    height: 100%;
+}
+
+
+.existent > .aka:hover{
+    background-color: red;
+    border: 3px solid gray;
+}
+
+.existent > .shiro:hover{
+    background-color: white;
+    border: 3px solid gray;
+}
+
+.aka.win{
+    background-color: red;
+}
+
+.aka.loose{
+    background-color: #870d0b;
+}
+
+.shiro.win{
+    background-color: white;
+}
+
+.shiro.loose{
+    background-color: #a19a9a;
+}
+
+.nonexistant > .aka{
+    background-color: black;
+}
+
+.nonexistant > .shiro{
+    background-color: black;  
+}
+
+.nonexistant > .record > .outerPlayer{
+    display: none;
+}
+
+.nonexistant > .record > .outerScore{
+    display: none;
 }
