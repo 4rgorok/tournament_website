@@ -1,0 +1,9 @@
+.bracketsWrapper{
+    margin:1%;
+}
+
+.brackets{
+    color: white;
+    border: 1px solid white;
+    text-decoration: none;
+}

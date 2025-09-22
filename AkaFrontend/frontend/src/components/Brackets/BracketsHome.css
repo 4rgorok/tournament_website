@@ -1,4 +1,6 @@
-
+.bracketsBody{
+    overflow:auto;
+}
 .record{
     
     border: solid 2px rgba(211, 220, 50, .6);
@@ -41,6 +43,14 @@
     text-align: center;
 }
 
+.outerScore.shiro{
+    background-color: white;
+}
+
+.outerScore.aka{
+    background-color: red;
+}
+
 .outerMatch{
     display: flex;
     flex-direction: column;
@@ -52,21 +62,21 @@
 
 
 .existent > .aka:hover{
-    background-color: red;
+    
     border: 3px solid gray;
 }
 
 .existent > .shiro:hover{
-    background-color: white;
+    
     border: 3px solid gray;
 }
 
 .aka.win{
-    background-color: red;
+    background-color: white;
 }
 
 .aka.loose{
-    background-color: #870d0b;
+    background-color: gray;
 }
 
 .shiro.win{

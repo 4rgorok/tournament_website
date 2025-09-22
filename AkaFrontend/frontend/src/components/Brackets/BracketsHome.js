@@ -6,7 +6,16 @@ import axios from 'axios';
 import { useWindowSize } from "@uidotdev/usehooks";
 import { SingleEliminationBracket, DoubleEliminationBracket, Match, MATCH_STATES, SVGViewer } from '@g-loot/react-tournament-brackets';
 
-function prepare_bracket_data(bracket){
+function getName(id, contesants){
+  //console.log("afadfsdfsd", contesants)
+  for(let i = 0; i<contesants.length; i++){
+    if(contesants[i].id == id){
+      return contesants[i].firstname + " " + contesants[i].lastname
+    }
+  }
+  return "xdd"
+}
+function prepare_bracket_data(bracket, contestants){
     let matches = []
     bracket.forEach(element => {
       console.log(element)
@@ -46,14 +55,14 @@ function prepare_bracket_data(bracket){
           {
             id: element.akaid,
             isWinner: element.akaid == element.winner ? true : false,
-            name: 'ala ma kota ola ma psa',//element.akaid,
+            name: getName(element.akaid, contestants),//"xd",//element.akaid,
             resultText: element.akaid == element.winner ? 'W' : 'L',
             status: 'PLAYED'
           },
           {
             id: element.shiroid,
             isWinner: element.shiroid == element.winner ? true : false,
-            name: element.shiroid,
+            name: getName(element.shiroid, contestants),//"xd2",//element.shiroid,
             resultText: element.shiroid == element.winner ? 'W' : 'L',
             status: 'PLAYED'
           }
@@ -65,7 +74,7 @@ function prepare_bracket_data(bracket){
           match.participants.push({
             id: element.akaid,
             isWinner: false,
-            name: element.akaid,
+            name: getName(element.akaid, contestants),//"xd",//element.akaid,
             resultText: '',
             status: null
           })
@@ -74,7 +83,7 @@ function prepare_bracket_data(bracket){
           match.participants.push({
             id: element.shiroid,
             isWinner: false,
-            name: element.shiroid,
+            name: getName(element.shiroid, contestants),//element.shiroid,
             resultText: '',
             status: null
           })
@@ -163,20 +172,20 @@ export const SingleElimination = ({ matches }) => (
             <div
               onMouseEnter={() => onMouseEnter(topParty.id)}
               onMouseLeave={() => onMouseLeave(topParty.id)}
-              className={`record aka ${topParty.resultText == 'W' ? 'win' : 'loose'}`}
+              className={`record aka ${topParty.resultText == 'L' || topParty.name == "TBD" ? 'loose' : 'win'}`}
             >
               <div className='outerPlayer'>{topParty.name || teamNameFallback}</div>
-              <div className='outerScore'><div className='innerScore'>{topParty.resultText ?? resultFallback(topParty)}</div></div>
+              <div className='outerScore aka'><div className='innerScore aka'>{topParty.resultText ?? resultFallback(topParty)}</div></div>
             </div>
             
             <div
             onLoad={eval(console.log(topText, 'cwel'))}
               onMouseEnter={() => onMouseEnter(bottomParty.id)}
               onMouseLeave={() => onMouseLeave(bottomParty.id)}
-              className={`record shiro ${bottomParty.resultText == 'W' ? 'win' : 'loose'}`}
+              className={`record shiro ${bottomParty.resultText == 'L' || bottomParty.name == "TBD" ? 'loose' : 'win'}`}
             >
               <div className='outerPlayer'>{bottomParty.name || teamNameFallback}</div>
-              <div className='outerScore'><div className='innerScore'>{bottomParty.resultText ?? resultFallback(topParty)}</div></div>
+              <div className='outerScore shiro'><div className='innerScore shiro'>{bottomParty.resultText ?? resultFallback(topParty)}</div></div>
             </div>
             <div> &nbsp;</div>
           </div>
@@ -187,7 +196,6 @@ export const SingleElimination = ({ matches }) => (
 
 const Brackets = ({ id }) => {
   const [bracket, setItems] = useState([]);
-    id = 12
     useEffect(() => {
         axios.get(BASE_URL+'/api/kumitetournament', {
         params: {gid: id},
@@ -197,11 +205,23 @@ const Brackets = ({ id }) => {
       .catch(error => console.error('Error fetching data:', error));
  
     }, []);
-  console.log(bracket)
+  
+    const [bracket2, setItems2] = useState([]);
+    
+    useEffect(() => {
+        axios.get(BASE_URL+'/api/contestant', {
+        
+      }
+      )
+      .then(response => setItems2(response.data))
+      .catch(error => console.error('Error fetching data:', error));
+ 
+    }, []);
+  console.log(bracket2)
   if(bracket[0] != undefined){
-    let matches = prepare_bracket_data(bracket)
+    let matches = prepare_bracket_data(bracket, bracket2)
     console.log(matches)
-    return <SingleElimination matches = {matches}/>;
+    return <div className='bracketsBody'><SingleElimination matches = {matches}/></div>;
   } 
 };
 

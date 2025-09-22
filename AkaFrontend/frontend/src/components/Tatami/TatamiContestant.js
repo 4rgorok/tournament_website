@@ -6,7 +6,7 @@ import './TatamiContestant.css';
 
 const TatamiContestant = ({ id, color, fight, type }) => {
     const [contestants, setItems] = useState([]);
-
+    console.log(id, color, fight, type, "xd")
     useEffect(() => {
         if(fight > 0){
             axios.get(BASE_URL+'/api/contestant', {
@@ -26,6 +26,7 @@ const TatamiContestant = ({ id, color, fight, type }) => {
     
         }
     }, []);
+    console.log(contestants)
     return (
         <div style={{ color: color}}>
             {contestants.map(contestant => (

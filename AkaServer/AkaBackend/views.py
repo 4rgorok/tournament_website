@@ -24,7 +24,9 @@ class ContestantListView(APIView):
             else:
                 uid = Kumitetournament.objects.get(id=fid).shiroid
             items = Contestant.objects.filter(id=uid)
+            #print(items)
         serializer = ContestantSerializer(items, many=True)
+        #print(serializer)
         return Response(serializer.data)
     
 class KataListView(APIView):
