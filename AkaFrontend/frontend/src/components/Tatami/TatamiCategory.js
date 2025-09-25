@@ -9,27 +9,21 @@ const TatamiCategory = ({ id, type }) => {
 
     useEffect(() => {
         if(type == 'kata'){
-            axios.get(BASE_URL+'/api/kata', {
-                params: {uid: id},
-            }
-            )
-                .then(response => setItems(response.data))
-                .catch(error => console.error('Error fetching data:', error));
+            axios.get(BASE_URL+'/api/kata')
+            .then(response => setItems(response.data))
+            .catch(error => console.error('Error fetching data:', error));
         
         }
         else if(type == 'kumite'){
-            axios.get(BASE_URL+'/api/kumite', {
-                params: {fid: id},
-            }
-            )
-                .then(response => setItems(response.data))
-                .catch(error => console.error('Error fetching data:', error));
+            axios.get(BASE_URL+'/api/kumite/fight/'+id)
+            .then(response => setItems(response.data))
+            .catch(error => console.error('Error fetching data:', error));
         }
     }, []);
-    if(category[0] != undefined)
+    if(category != undefined)
     {
         return (
-            <h2 className='category' key={category[0].id}>{category[0].groupname}</h2>
+            <h2 className='category' key={category.id}>{category.groupname}</h2>
         );
     }
 };

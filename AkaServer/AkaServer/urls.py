@@ -15,16 +15,51 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import include, path
-from AkaBackend.views import *
+from django.urls import path, include, re_path
+from django.views.generic import TemplateView
+from django.conf import settings
+from django.conf.urls.static import static
+from django.views.static import serve
+import os
+
+REACT_BUILD_DIR = os.path.join(settings.BASE_DIR.parent, 'AkaFrontend/frontend/build')
 
 urlpatterns = [
-    path("api/tatami", TatamiListView.as_view(), name='tatami-list'),
-    path("api/kata", KataListView.as_view(), name='kata-list'),
-    path("api/kumite", KumiteListView.as_view(), name='kumite-list'),
-    path("api/dojo", DojoListView.as_view(), name='dojo-list'),
-    path("api/setup", SetupListView.as_view(), name='setup-list'),
-    path("api/contestant", ContestantListView.as_view(), name='contestant-list'),
-    path("api/kumitetournament", KumitetournamentListView.as_view(), name='kumitetournament-list'),
-    path('admin/', admin.site.urls),
+    path('api/', include('AkaBackend.urls')),
+]
+
+# Serve static files from React build
+urlpatterns += [
+    re_path(r'^static/(?P<path>.*)$', serve, {
+        'document_root': os.path.join(REACT_BUILD_DIR, 'static'),
+    }),
+]
+
+urlpatterns += [
+    re_path(r'^static/css/(?P<path>.*)$', serve, {
+        'document_root': os.path.join(REACT_BUILD_DIR, 'static/css'),
+        'content_type': 'text/css',  # Explicitly set MIME type
+    }),
+]
+
+# Serve other files from React build (manifest.json, favicon.ico, etc.)
+urlpatterns += [
+    re_path(r'^(?P<path>(manifest\.json|favicon\.ico|logo\d+\.png))$', serve, {
+        'document_root': REACT_BUILD_DIR,
+    }),
+]
+
+# Serve media files
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+urlpatterns += [
+        re_path(r'^media/(?P<path>.*)$', serve, {
+           'document_root': settings.MEDIA_ROOT,
+        }),
+]
+
+# Catch-all route for React - must be last
+urlpatterns += [
+    re_path(r'^.*', TemplateView.as_view(template_name='index.html')),
 ]

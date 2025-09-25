@@ -119,6 +119,7 @@ p.vs{
         grid-template-columns: 1fr; /* Stack boxes vertically */
         grid-auto-rows: auto; /* Allow dynamic row height */
         gap: 4vh;
+        margin-top: 5vh;
     }
 
     #id1{

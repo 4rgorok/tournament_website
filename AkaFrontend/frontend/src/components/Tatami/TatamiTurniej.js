@@ -16,7 +16,10 @@ const TatamiTurniej = () => {
     return (
         <div>
             {turniej.map(turn => (
+                <>
                 <h1 className='turniej' key={turn.id}>{turn.tournament}</h1>
+                
+                </>
             ))}
         </div>
     );

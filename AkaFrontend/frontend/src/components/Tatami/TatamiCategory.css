@@ -1,5 +1,5 @@
 h2.category {
-    font-size: 6cqw;
+    font-size: 4cqw;
     margin: 0;
     padding: 0;
     width: 80%;
@@ -8,7 +8,7 @@ h2.category {
     color: black;
     cursor:default;
     user-select: none;
-    padding-top:6cqh;
+    padding-top:8cqh;
 }
 
 

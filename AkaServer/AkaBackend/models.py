@@ -10,19 +10,19 @@ from django.db import models
 
 class Arkusz(models.Model):
     iddojo = models.IntegerField(db_column='IdDojo', blank=True, null=True)  # Field name made lowercase.
-    firstname = models.CharField(db_column='FirstName', max_length=255, db_collation='Latin1_General_CI_AS', blank=True, null=True)  # Field name made lowercase.
-    lastname = models.CharField(db_column='LastName', max_length=255, db_collation='Latin1_General_CI_AS', blank=True, null=True)  # Field name made lowercase.
+    firstname = models.CharField(db_column='FirstName', max_length=255, db_collation='SQL_Latin1_General_CP1_CI_AS', blank=True, null=True)  # Field name made lowercase.
+    lastname = models.CharField(db_column='LastName', max_length=255, db_collation='SQL_Latin1_General_CP1_CI_AS', blank=True, null=True)  # Field name made lowercase.
     weight = models.FloatField(db_column='Weight', blank=True, null=True)  # Field name made lowercase.
-    rank = models.CharField(db_column='Rank', max_length=255, db_collation='Latin1_General_CI_AS', blank=True, null=True)  # Field name made lowercase.
-    kumitetxt = models.CharField(db_column='KumiteTxt', max_length=255, db_collation='Latin1_General_CI_AS', blank=True, null=True)  # Field name made lowercase.
-    katatxt = models.CharField(db_column='KataTxt', max_length=255, db_collation='Latin1_General_CI_AS', blank=True, null=True)  # Field name made lowercase.
+    rank = models.CharField(db_column='Rank', max_length=255, db_collation='SQL_Latin1_General_CP1_CI_AS', blank=True, null=True)  # Field name made lowercase.
+    kumitetxt = models.CharField(db_column='KumiteTxt', max_length=255, db_collation='SQL_Latin1_General_CP1_CI_AS', blank=True, null=True)  # Field name made lowercase.
+    katatxt = models.CharField(db_column='KataTxt', max_length=255, db_collation='SQL_Latin1_General_CP1_CI_AS', blank=True, null=True)  # Field name made lowercase.
     rok = models.IntegerField(db_column='Rok', blank=True, null=True)  # Field name made lowercase.
     miesiac = models.IntegerField(db_column='Miesiac', blank=True, null=True)  # Field name made lowercase.
     dzien = models.IntegerField(db_column='Dzien', blank=True, null=True)  # Field name made lowercase.
     age = models.IntegerField(db_column='Age', blank=True, null=True)  # Field name made lowercase.
     dob = models.DateField(db_column='DOB', blank=True, null=True)  # Field name made lowercase.
     idrank = models.IntegerField(db_column='IdRank', blank=True, null=True)  # Field name made lowercase.
-    gender = models.CharField(db_column='Gender', max_length=1, db_collation='Latin1_General_CI_AS', blank=True, null=True)  # Field name made lowercase.
+    gender = models.CharField(db_column='Gender', max_length=1, db_collation='SQL_Latin1_General_CP1_CI_AS', blank=True, null=True)  # Field name made lowercase.
     kumite = models.BooleanField(db_column='Kumite')  # Field name made lowercase.
     kata = models.BooleanField(db_column='Kata')  # Field name made lowercase.
 
@@ -34,23 +34,23 @@ class Arkusz(models.Model):
 class Contestant(models.Model):
     id = models.AutoField(db_column='Id', primary_key=True)  # Field name made lowercase.
     idcountry = models.IntegerField(db_column='IdCountry', blank=True, null=True)  # Field name made lowercase.
-    iddojo = models.IntegerField(db_column='IdDojo', blank=True, null=True)  # Field name made lowercase.
+    iddojo = models.ForeignKey('Dojo', models.DO_NOTHING, db_column='IdDojo', blank=True, null=True)  # Field name made lowercase.
     contestantnumber = models.IntegerField(db_column='ContestantNumber', blank=True, null=True)  # Field name made lowercase.
-    gender = models.CharField(db_column='Gender', max_length=1, db_collation='Latin1_General_CI_AS', blank=True, null=True)  # Field name made lowercase.
-    lastname = models.CharField(db_column='LastName', max_length=50, db_collation='Latin1_General_CI_AS', blank=True, null=True)  # Field name made lowercase.
-    firstname = models.CharField(db_column='FirstName', max_length=50, db_collation='Latin1_General_CI_AS', blank=True, null=True)  # Field name made lowercase.
+    gender = models.CharField(db_column='Gender', max_length=1, db_collation='SQL_Latin1_General_CP1_CI_AS', blank=True, null=True)  # Field name made lowercase.
+    lastname = models.CharField(db_column='LastName', max_length=50, db_collation='SQL_Latin1_General_CP1_CI_AS', blank=True, null=True)  # Field name made lowercase.
+    firstname = models.CharField(db_column='FirstName', max_length=50, db_collation='SQL_Latin1_General_CP1_CI_AS', blank=True, null=True)  # Field name made lowercase.
     weight = models.IntegerField(db_column='Weight', blank=True, null=True)  # Field name made lowercase.
     dob = models.DateTimeField(db_column='DOB', blank=True, null=True)  # Field name made lowercase.
     age = models.IntegerField(db_column='Age', blank=True, null=True)  # Field name made lowercase.
     t5 = models.BooleanField(db_column='T5')  # Field name made lowercase.
     kumite = models.BooleanField(db_column='Kumite')  # Field name made lowercase.
     kata = models.BooleanField(db_column='Kata')  # Field name made lowercase.
-    idkatagroupt5 = models.IntegerField(db_column='IdKataGroupT5')  # Field name made lowercase.
-    idkumitegroup = models.IntegerField(db_column='IdKumiteGroup')  # Field name made lowercase.
-    idkatagroup = models.IntegerField(db_column='IdKataGroup')  # Field name made lowercase.
+    idkatagroupt5 = models.ForeignKey('Kata', models.DO_NOTHING, db_column='IdKataGroupT5')  # Field name made lowercase.
+    idkumitegroup = models.ForeignKey('Kumite', models.DO_NOTHING, db_column='IdKumiteGroup')  # Field name made lowercase.
+    idkatagroup = models.ForeignKey('Kata', models.DO_NOTHING, db_column='IdKataGroup', related_name='contestant_idkatagroup_set')  # Field name made lowercase.
     sortingroup = models.IntegerField(db_column='SortInGroup')  # Field name made lowercase.
     verified = models.BooleanField(db_column='Verified')  # Field name made lowercase.
-    idrank = models.IntegerField(db_column='IdRank')  # Field name made lowercase.
+    idrank = models.ForeignKey('Rank', models.DO_NOTHING, db_column='IdRank')  # Field name made lowercase.
     kumiterank = models.IntegerField(db_column='KumiteRank')  # Field name made lowercase.
     katarank = models.IntegerField(db_column='KataRank')  # Field name made lowercase.
     judge = models.BooleanField(db_column='Judge')  # Field name made lowercase.
@@ -62,7 +62,7 @@ class Contestant(models.Model):
 
 class Country(models.Model):
     id = models.AutoField(db_column='Id', primary_key=True)  # Field name made lowercase.
-    countryname = models.CharField(db_column='CountryName', max_length=70, db_collation='Latin1_General_CI_AS', blank=True, null=True)  # Field name made lowercase.
+    countryname = models.CharField(db_column='CountryName', max_length=70, db_collation='SQL_Latin1_General_CP1_CI_AS', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -71,16 +71,16 @@ class Country(models.Model):
 
 class Dojo(models.Model):
     id = models.IntegerField(db_column='Id', primary_key=True)  # Field name made lowercase.
-    dojoname = models.CharField(db_column='DojoName', max_length=150, db_collation='Latin1_General_CI_AS')  # Field name made lowercase.
-    dojoshort = models.CharField(db_column='DojoShort', max_length=30, db_collation='Latin1_General_CI_AS')  # Field name made lowercase.
-    contactname = models.CharField(db_column='ContactName', max_length=70, db_collation='Latin1_General_CI_AS')  # Field name made lowercase.
-    phone = models.CharField(db_column='Phone', max_length=30, db_collation='Latin1_General_CI_AS')  # Field name made lowercase.
-    address = models.CharField(db_column='Address', max_length=150, db_collation='Latin1_General_CI_AS')  # Field name made lowercase.
-    email = models.CharField(db_column='Email', max_length=70, db_collation='Latin1_General_CI_AS')  # Field name made lowercase.
-    nip = models.CharField(db_column='NIP', max_length=20, db_collation='Latin1_General_CI_AS')  # Field name made lowercase.
+    dojoname = models.CharField(db_column='DojoName', max_length=150, db_collation='SQL_Latin1_General_CP1_CI_AS')  # Field name made lowercase.
+    dojoshort = models.CharField(db_column='DojoShort', max_length=30, db_collation='SQL_Latin1_General_CP1_CI_AS')  # Field name made lowercase.
+    contactname = models.CharField(db_column='ContactName', max_length=70, db_collation='SQL_Latin1_General_CP1_CI_AS')  # Field name made lowercase.
+    phone = models.CharField(db_column='Phone', max_length=30, db_collation='SQL_Latin1_General_CP1_CI_AS')  # Field name made lowercase.
+    address = models.CharField(db_column='Address', max_length=150, db_collation='SQL_Latin1_General_CP1_CI_AS')  # Field name made lowercase.
+    email = models.CharField(db_column='Email', max_length=70, db_collation='SQL_Latin1_General_CP1_CI_AS')  # Field name made lowercase.
+    nip = models.CharField(db_column='NIP', max_length=20, db_collation='SQL_Latin1_General_CP1_CI_AS')  # Field name made lowercase.
     pzk = models.BooleanField(db_column='PZK')  # Field name made lowercase.
-    organization = models.CharField(db_column='Organization', max_length=70, db_collation='Latin1_General_CI_AS')  # Field name made lowercase.
-    dojolink = models.CharField(db_column='DojoLink', max_length=50, db_collation='Latin1_General_CI_AS')  # Field name made lowercase.
+    organization = models.CharField(db_column='Organization', max_length=70, db_collation='SQL_Latin1_General_CP1_CI_AS')  # Field name made lowercase.
+    dojolink = models.CharField(db_column='DojoLink', max_length=50, db_collation='SQL_Latin1_General_CP1_CI_AS')  # Field name made lowercase.
     qty1 = models.IntegerField(db_column='Qty1')  # Field name made lowercase.
     qty2 = models.IntegerField(db_column='Qty2')  # Field name made lowercase.
     qty3 = models.IntegerField(db_column='Qty3')  # Field name made lowercase.
@@ -92,12 +92,12 @@ class Dojo(models.Model):
 
 class Kata(models.Model):
     id = models.AutoField(db_column='Id', primary_key=True)  # Field name made lowercase.
-    idtatami = models.IntegerField(db_column='IdTatami')  # Field name made lowercase.
+    idtatami = models.ForeignKey('Tatami', models.DO_NOTHING, db_column='IdTatami')  # Field name made lowercase.
     t5 = models.BooleanField(db_column='T5')  # Field name made lowercase.
-    gender = models.CharField(db_column='Gender', max_length=1, db_collation='Latin1_General_CI_AS', blank=True, null=True)  # Field name made lowercase.
+    gender = models.CharField(db_column='Gender', max_length=1, db_collation='SQL_Latin1_General_CP1_CI_AS', blank=True, null=True)  # Field name made lowercase.
     age = models.IntegerField(db_column='Age', blank=True, null=True)  # Field name made lowercase.
-    groupname = models.CharField(db_column='GroupName', max_length=150, db_collation='Latin1_General_CI_AS')  # Field name made lowercase.
-    description = models.CharField(db_column='Description', max_length=150, db_collation='Latin1_General_CI_AS')  # Field name made lowercase.
+    groupname = models.CharField(db_column='GroupName', max_length=150, db_collation='SQL_Latin1_General_CP1_CI_AS')  # Field name made lowercase.
+    description = models.CharField(db_column='Description', max_length=150, db_collation='SQL_Latin1_General_CP1_CI_AS')  # Field name made lowercase.
     matstatus = models.IntegerField(db_column='MatStatus')  # Field name made lowercase.
     stage = models.IntegerField(db_column='Stage')  # Field name made lowercase.
     kata5judge = models.BooleanField(db_column='Kata5Judge')  # Field name made lowercase.
@@ -112,8 +112,8 @@ class Kata(models.Model):
 
 class Katatournament(models.Model):
     id = models.AutoField(db_column='Id', primary_key=True)  # Field name made lowercase.
-    idgroup = models.IntegerField(db_column='IdGroup')  # Field name made lowercase.
-    idcontestant = models.IntegerField(db_column='IdContestant')  # Field name made lowercase.
+    idgroup = models.ForeignKey(Kata, models.DO_NOTHING, db_column='IdGroup')  # Field name made lowercase.
+    idcontestant = models.ForeignKey(Contestant, models.DO_NOTHING, db_column='IdContestant')  # Field name made lowercase.
     place = models.IntegerField(db_column='Place')  # Field name made lowercase.
     final = models.BooleanField(db_column='Final')  # Field name made lowercase.
     placeeliminations = models.IntegerField(db_column='PlaceEliminations')  # Field name made lowercase.
@@ -149,12 +149,12 @@ class Katatournament(models.Model):
 
 class Kumite(models.Model):
     id = models.AutoField(db_column='Id', primary_key=True)  # Field name made lowercase.
-    idtatami = models.IntegerField(db_column='IdTatami')  # Field name made lowercase.
-    gender = models.CharField(db_column='Gender', max_length=1, db_collation='Latin1_General_CI_AS')  # Field name made lowercase.
+    idtatami = models.ForeignKey('Tatami', models.DO_NOTHING, db_column='IdTatami')  # Field name made lowercase.
+    gender = models.CharField(db_column='Gender', max_length=1, db_collation='SQL_Latin1_General_CP1_CI_AS')  # Field name made lowercase.
     age = models.IntegerField(db_column='Age')  # Field name made lowercase.
     weight = models.IntegerField(db_column='Weight')  # Field name made lowercase.
-    groupname = models.CharField(db_column='GroupName', max_length=150, db_collation='Latin1_General_CI_AS')  # Field name made lowercase.
-    description = models.CharField(db_column='Description', max_length=150, db_collation='Latin1_General_CI_AS')  # Field name made lowercase.
+    groupname = models.CharField(db_column='GroupName', max_length=150, db_collation='SQL_Latin1_General_CP1_CI_AS')  # Field name made lowercase.
+    description = models.CharField(db_column='Description', max_length=150, db_collation='SQL_Latin1_General_CP1_CI_AS')  # Field name made lowercase.
     matstatus = models.IntegerField(db_column='MatStatus')  # Field name made lowercase.
     stage = models.IntegerField(db_column='Stage')  # Field name made lowercase.
     time1 = models.IntegerField(db_column='Time1')  # Field name made lowercase.
@@ -173,8 +173,8 @@ class Kumite(models.Model):
 
 class Kumiteg3(models.Model):
     id = models.AutoField(db_column='Id', primary_key=True)  # Field name made lowercase.
-    idgroup = models.IntegerField(db_column='IdGroup')  # Field name made lowercase.
-    idcontestant = models.IntegerField(db_column='IdContestant')  # Field name made lowercase.
+    idgroup = models.ForeignKey(Kumite, models.DO_NOTHING, db_column='IdGroup')  # Field name made lowercase.
+    idcontestant = models.ForeignKey(Contestant, models.DO_NOTHING, db_column='IdContestant')  # Field name made lowercase.
     place = models.IntegerField(db_column='Place')  # Field name made lowercase.
 
     class Meta:
@@ -199,22 +199,22 @@ class Kumitegroupsort(models.Model):
 class Kumitetournament(models.Model):
     id = models.AutoField(db_column='Id', primary_key=True)  # Field name made lowercase.
     fightno = models.IntegerField(db_column='FightNo')  # Field name made lowercase.
-    idgroup = models.IntegerField(db_column='IdGroup')  # Field name made lowercase.
-    entityno = models.CharField(db_column='EntityNo', max_length=6, db_collation='Latin1_General_CI_AS')  # Field name made lowercase.
+    idgroup = models.ForeignKey(Kumite, models.DO_NOTHING, db_column='IdGroup')  # Field name made lowercase.
+    entityno = models.CharField(db_column='EntityNo', max_length=6, db_collation='SQL_Latin1_General_CP1_CI_AS')  # Field name made lowercase.
     orderno = models.IntegerField(db_column='OrderNo')  # Field name made lowercase.
     level = models.IntegerField(db_column='Level')  # Field name made lowercase.
-    leveltxt = models.CharField(db_column='LevelTxt', max_length=100, db_collation='Latin1_General_CI_AS')  # Field name made lowercase.
-    akaid = models.IntegerField(db_column='AkaId')  # Field name made lowercase.
-    shiroid = models.IntegerField(db_column='ShiroId')  # Field name made lowercase.
+    leveltxt = models.CharField(db_column='LevelTxt', max_length=100, db_collation='SQL_Latin1_General_CP1_CI_AS')  # Field name made lowercase.
+    akaid = models.ForeignKey(Contestant, models.DO_NOTHING, db_column='AkaId')  # Field name made lowercase.
+    shiroid = models.ForeignKey(Contestant, models.DO_NOTHING, db_column='ShiroId', related_name='kumitetournament_shiroid_set')  # Field name made lowercase.
     kumitestatus = models.IntegerField(db_column='KumiteStatus')  # Field name made lowercase.
     nextfightno = models.IntegerField(db_column='NextFightNo')  # Field name made lowercase.
     isnextaka = models.IntegerField(db_column='IsNextAka')  # Field name made lowercase.
     winner = models.IntegerField(db_column='Winner')  # Field name made lowercase.
     loser = models.IntegerField(db_column='Loser')  # Field name made lowercase.
-    idtatami = models.IntegerField(db_column='IdTatami')  # Field name made lowercase.
+    idtatami = models.ForeignKey('Tatami', models.DO_NOTHING, db_column='IdTatami')  # Field name made lowercase.
     isactive = models.BooleanField(db_column='IsActive')  # Field name made lowercase.
     g3 = models.BooleanField(db_column='G3')  # Field name made lowercase.
-    nextentityno = models.CharField(db_column='NextEntityNo', max_length=6, db_collation='Latin1_General_CI_AS')  # Field name made lowercase.
+    nextentityno = models.CharField(db_column='NextEntityNo', max_length=6, db_collation='SQL_Latin1_General_CP1_CI_AS')  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -223,8 +223,8 @@ class Kumitetournament(models.Model):
 
 class Organization(models.Model):
     id = models.AutoField(db_column='Id', primary_key=True)  # Field name made lowercase.
-    short = models.CharField(db_column='Short', max_length=25, db_collation='Latin1_General_CI_AS')  # Field name made lowercase.
-    name = models.CharField(db_column='Name', max_length=250, db_collation='Latin1_General_CI_AS')  # Field name made lowercase.
+    short = models.CharField(db_column='Short', max_length=25, db_collation='SQL_Latin1_General_CP1_CI_AS')  # Field name made lowercase.
+    name = models.CharField(db_column='Name', max_length=250, db_collation='SQL_Latin1_General_CP1_CI_AS')  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -233,7 +233,7 @@ class Organization(models.Model):
 
 class Rank(models.Model):
     id = models.AutoField(db_column='Id', primary_key=True)  # Field name made lowercase.
-    rank = models.CharField(db_column='Rank', max_length=50, db_collation='Latin1_General_CI_AS')  # Field name made lowercase.
+    rank = models.CharField(db_column='Rank', max_length=50, db_collation='SQL_Latin1_General_CP1_CI_AS')  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -243,7 +243,7 @@ class Rank(models.Model):
 class Role(models.Model):
     id = models.AutoField(db_column='Id', primary_key=True)  # Field name made lowercase.
     flag = models.IntegerField(db_column='Flag')  # Field name made lowercase.
-    role = models.CharField(db_column='Role', max_length=50, db_collation='Latin1_General_CI_AS')  # Field name made lowercase.
+    role = models.CharField(db_column='Role', max_length=50, db_collation='SQL_Latin1_General_CP1_CI_AS')  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -260,12 +260,12 @@ class Setup(models.Model):
     kata5judge = models.BooleanField(db_column='Kata5Judge')  # Field name made lowercase.
     directedfights = models.BooleanField(db_column='DirectedFights')  # Field name made lowercase.
     fivetechniques = models.BooleanField(db_column='FiveTechniques')  # Field name made lowercase.
-    tournament = models.CharField(db_column='Tournament', max_length=250, db_collation='Latin1_General_CI_AS')  # Field name made lowercase.
+    tournament = models.CharField(db_column='Tournament', max_length=250, db_collation='SQL_Latin1_General_CP1_CI_AS')  # Field name made lowercase.
     kumiteno = models.IntegerField(db_column='KumiteNo')  # Field name made lowercase.
-    printfooter = models.CharField(db_column='PrintFooter', max_length=2500, db_collation='Latin1_General_CI_AS', blank=True, null=True)  # Field name made lowercase.
-    announcement = models.CharField(db_column='Announcement', max_length=2500, db_collation='Latin1_General_CI_AS', blank=True, null=True)  # Field name made lowercase.
-    printer = models.CharField(db_column='Printer', max_length=350, db_collation='Latin1_General_CI_AS')  # Field name made lowercase.
-    pdffolder = models.CharField(db_column='PdfFolder', max_length=350, db_collation='Latin1_General_CI_AS')  # Field name made lowercase.
+    printfooter = models.CharField(db_column='PrintFooter', max_length=2500, db_collation='SQL_Latin1_General_CP1_CI_AS', blank=True, null=True)  # Field name made lowercase.
+    announcement = models.CharField(db_column='Announcement', max_length=2500, db_collation='SQL_Latin1_General_CP1_CI_AS', blank=True, null=True)  # Field name made lowercase.
+    printer = models.CharField(db_column='Printer', max_length=350, db_collation='SQL_Latin1_General_CP1_CI_AS')  # Field name made lowercase.
+    pdffolder = models.CharField(db_column='PdfFolder', max_length=350, db_collation='SQL_Latin1_General_CP1_CI_AS')  # Field name made lowercase.
     printtofile = models.BooleanField(db_column='PrintToFile')  # Field name made lowercase.
     katarunda2 = models.IntegerField(db_column='KataRunda2')  # Field name made lowercase.
     tournamentdate = models.DateField(db_column='TournamentDate', blank=True, null=True)  # Field name made lowercase.
@@ -281,31 +281,13 @@ class Tatami(models.Model):
     isactivekumite = models.BooleanField(db_column='IsActiveKumite')  # Field name made lowercase.
     isactivekata = models.BooleanField(db_column='IsActiveKata')  # Field name made lowercase.
     stage = models.IntegerField(db_column='Stage')  # Field name made lowercase.
-    prefix = models.CharField(db_column='Prefix', max_length=1, db_collation='Latin1_General_CI_AS')  # Field name made lowercase.
+    prefix = models.CharField(db_column='Prefix', max_length=1, db_collation='SQL_Latin1_General_CP1_CI_AS')  # Field name made lowercase.
     kumiteno = models.IntegerField(db_column='KumiteNo')  # Field name made lowercase.
-    description = models.CharField(db_column='Description', max_length=150, db_collation='Latin1_General_CI_AS')  # Field name made lowercase.
+    description = models.CharField(db_column='Description', max_length=150, db_collation='SQL_Latin1_General_CP1_CI_AS')  # Field name made lowercase.
     issemifinalsactive = models.BooleanField(db_column='IsSemifinalsActive')  # Field name made lowercase.
     isfinalsactive = models.BooleanField(db_column='IsFinalsActive')  # Field name made lowercase.
-    idcontestantkata = models.IntegerField(db_column='IdContestantKata')  # Field name made lowercase.
-    idkumitetournament = models.IntegerField(db_column='IdKumiteTournament')  # Field name made lowercase.
-
-    def save(self, *args, **kwargs):
-        return
-
-    def delete(self, *args, **kwargs):
-        print("CWEL")
-        self.active = False
-        return
-    
-    def create(self, *args, **kwargs):
-        print("CWE2L")
-        self.active = False
-        return
-    
-    def update(self, *args, **kwargs):
-        print("CWEL3")
-        self.active = False
-        return
+    idcontestantkata = models.ForeignKey(Contestant, models.DO_NOTHING, db_column='IdContestantKata')  # Field name made lowercase.
+    idkumitetournament = models.ForeignKey(Contestant, models.DO_NOTHING, db_column='IdKumiteTournament', related_name='tatami_idkumitetournament_set')  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -314,8 +296,8 @@ class Tatami(models.Model):
 
 class User(models.Model):
     id = models.AutoField(db_column='Id', primary_key=True)  # Field name made lowercase.
-    firstname = models.CharField(db_column='FirstName', max_length=50, db_collation='Latin1_General_CI_AS')  # Field name made lowercase.
-    lastname = models.CharField(db_column='LastName', max_length=50, db_collation='Latin1_General_CI_AS')  # Field name made lowercase.
+    firstname = models.CharField(db_column='FirstName', max_length=50, db_collation='SQL_Latin1_General_CP1_CI_AS')  # Field name made lowercase.
+    lastname = models.CharField(db_column='LastName', max_length=50, db_collation='SQL_Latin1_General_CP1_CI_AS')  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -324,8 +306,16 @@ class User(models.Model):
 
 class Websetup(models.Model):
     isactive = models.BooleanField(db_column='IsActive', primary_key=True)  # Field name made lowercase.
-    akakey = models.CharField(db_column='AkaKey', max_length=50, db_collation='Latin1_General_CI_AS', blank=True, null=True)  # Field name made lowercase.
+    akakey = models.CharField(db_column='AkaKey', max_length=50, db_collation='SQL_Latin1_General_CP1_CI_AS', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
         db_table = 'WebSetup'
+
+
+class Refactorlog(models.Model):
+    operationkey = models.CharField(db_column='OperationKey', primary_key=True, max_length=36)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = '__RefactorLog'

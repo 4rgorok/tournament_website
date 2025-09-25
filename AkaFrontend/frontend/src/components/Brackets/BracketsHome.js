@@ -7,7 +7,6 @@ import { useWindowSize } from "@uidotdev/usehooks";
 import { SingleEliminationBracket, DoubleEliminationBracket, Match, MATCH_STATES, SVGViewer } from '@g-loot/react-tournament-brackets';
 
 function getName(id, contesants){
-  //console.log("afadfsdfsd", contesants)
   for(let i = 0; i<contesants.length; i++){
     if(contesants[i].id == id){
       return contesants[i].firstname + " " + contesants[i].lastname
@@ -18,7 +17,6 @@ function getName(id, contesants){
 function prepare_bracket_data(bracket, contestants){
     let matches = []
     bracket.forEach(element => {
-      console.log(element)
       let match = {
         id: element.fightno,
         name: '',
@@ -94,7 +92,7 @@ function prepare_bracket_data(bracket, contestants){
     return matches
 }
 
-export const SingleElimination = ({ matches }) => (
+export const SingleElimination = ({ matches, bo3 = false }) => (
       <SingleEliminationBracket
         matches={matches}
         //matchComponent={Match}
@@ -179,7 +177,6 @@ export const SingleElimination = ({ matches }) => (
             </div>
             
             <div
-            onLoad={eval(console.log(topText, 'cwel'))}
               onMouseEnter={() => onMouseEnter(bottomParty.id)}
               onMouseLeave={() => onMouseLeave(bottomParty.id)}
               className={`record shiro ${bottomParty.resultText == 'L' || bottomParty.name == "TBD" ? 'loose' : 'win'}`}
@@ -197,30 +194,31 @@ export const SingleElimination = ({ matches }) => (
 const Brackets = ({ id }) => {
   const [bracket, setItems] = useState([]);
     useEffect(() => {
-        axios.get(BASE_URL+'/api/kumitetournament', {
-        params: {gid: id},
-      }
-      )
+      axios.get(BASE_URL+'/api/kumitetournament/'+id)
       .then(response => setItems(response.data))
       .catch(error => console.error('Error fetching data:', error));
- 
     }, []);
   
     const [bracket2, setItems2] = useState([]);
     
     useEffect(() => {
-        axios.get(BASE_URL+'/api/contestant', {
-        
-      }
-      )
+      axios.get(BASE_URL+'/api/contestants')
       .then(response => setItems2(response.data))
       .catch(error => console.error('Error fetching data:', error));
- 
     }, []);
-  console.log(bracket2)
   if(bracket[0] != undefined){
+    if(bracket[0]["g3"]){
+      return (
+        <>
+          <p className='bo3-text'>Walki na zasadzie każdy z każdym ze względu na 3 zawodników w kategorii.</p>
+          <p className='bo3-text'>Decyzję o ostatecznych miejscach na podium podejmuje sędzia główny.</p>
+          <div className='bracketsBody bo3'><SingleElimination matches = {prepare_bracket_data([bracket[0]], bracket2)}/></div>;
+          <div className='bracketsBody bo3'><SingleElimination matches = {prepare_bracket_data([bracket[1]], bracket2)}/></div>;
+          <div className='bracketsBody bo3'><SingleElimination matches = {prepare_bracket_data([bracket[2]], bracket2)}/></div>;
+        </>
+      )
+    }
     let matches = prepare_bracket_data(bracket, bracket2)
-    console.log(matches)
     return <div className='bracketsBody'><SingleElimination matches = {matches}/></div>;
   } 
 };

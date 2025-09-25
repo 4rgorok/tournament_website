@@ -6,30 +6,21 @@ import './TatamiContestant.css';
 
 const TatamiContestant = ({ id, color, fight, type }) => {
     const [contestants, setItems] = useState([]);
-    console.log(id, color, fight, type, "xd")
     useEffect(() => {
         if(fight > 0){
-            axios.get(BASE_URL+'/api/contestant', {
-                params: {fid: fight, type: type},
-            }
-            )
+            axios.get(BASE_URL+'/api/contestant/'+fight+"/"+type)
             .then(response => setItems(response.data))
             .catch(error => console.error('Error fetching data:', error));
         }
         else{
-            axios.get(BASE_URL+'/api/contestant', {
-                params: {id: id},
-            }
-            )
+            axios.get(BASE_URL+'/api/contestant/'+id)
             .then(response => setItems(response.data))
             .catch(error => console.error('Error fetching data:', error));
-    
         }
     }, []);
-    console.log(contestants)
     return (
         <div style={{ color: color}}>
-            {contestants.map(contestant => (
+            {[contestants].map(contestant => (
                 <h3 className='contestant' key={contestant.id}>{contestant.firstname} {contestant.lastname}</h3>
             ))}
         </div>

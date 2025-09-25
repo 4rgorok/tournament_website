@@ -19,7 +19,6 @@ const TatamiList = () => {
     }, []);
     
     let idcontainer = 'id' + tatamis.length
-
     return (
         <div className='App'>
         <TatamiTurniej/>
@@ -30,11 +29,11 @@ const TatamiList = () => {
                             <h2 className='mata'>Mata {tatami.prefix} - kumite</h2>
                             <TatamiCategory id = {tatami.idkumitetournament} type = 'kumite'/>
                             <div className='fight'>
-                                <TatamiContestant color="blue" fight={tatami.idkumitetournament} type='1'/>
-                                <TatamiDojo fight={tatami.idkumitetournament} type='1' color="blue"/>
+                                <TatamiContestant color="blue" fight={tatami.idkumitetournament} type='shiro'/>
+                                <TatamiDojo fight={tatami.idkumitetournament} type='shiro' color="blue"/>
                                 <p className='vs'>vs</p> 
-                                <TatamiContestant color="red" fight={tatami.idkumitetournament} type='0'/>
-                                <TatamiDojo fight={tatami.idkumitetournament} type='0' color="red"/>
+                                <TatamiContestant color="red" fight={tatami.idkumitetournament} type='aka'/>
+                                <TatamiDojo fight={tatami.idkumitetournament} type='aka' color="red"/>
                             </div>
                         </div>
                     ))}

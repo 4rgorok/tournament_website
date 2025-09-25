@@ -8,25 +8,19 @@ const TatamiDojo = ({ id, color, fight, type }) => {
 
     useEffect(() => {
         if(fight > 0){
-            axios.get(BASE_URL+'/api/dojo', {
-                params: {fid: fight, type: type},
-            }
-            )
+            axios.get(BASE_URL+'/api/dojo/'+fight+"/"+type)
             .then(response => setItems(response.data))
             .catch(error => console.error('Error fetching data:', error));
         }
         else{
-            axios.get(BASE_URL+'/api/dojo', {
-                params: {uid: id},
-            }
-            )
-                .then(response => setItems(response.data))
-                .catch(error => console.error('Error fetching data:', error));
+            axios.get(BASE_URL+'/api/dojo/contestant/'+id)
+            .then(response => setItems(response.data))
+            .catch(error => console.error('Error fetching data:', error));
         }
     }, []);
     return (
         <div style={{ color: color}}>
-            {dojo.map(doj => (
+            {[dojo].map(doj => (
                 <h3 className='dojo' key={doj.id}>{doj.dojoname}</h3>
             ))}
         </div>
