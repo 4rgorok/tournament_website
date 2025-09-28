@@ -1,1 +1,1 @@
-export const BASE_URL = "https://zaw.jakszm.ovh"//"http://127.0.0.1:8000"
+export const BASE_URL = "https://zawody.jakszm.ovh"//"http://127.0.0.1:8000"

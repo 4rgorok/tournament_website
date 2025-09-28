@@ -6,9 +6,9 @@ from django.http import JsonResponse
 from .models import *
 from .serializers import *
 
-class TatamiListView(generics.ListAPIView):
-    queryset = Tatami.objects.all().filter(isactive=True)
-    serializer_class = TatamiSerializer
+#class TatamiListView(generics.ListAPIView):
+#    queryset = Tatami.objects.all().filter(isactive=True).select_related('idkumitetournament')
+#    serializer_class = TatamiSerializer
 
 class ContestantListView(generics.ListAPIView):
     queryset = Contestant.objects.all()
@@ -45,7 +45,7 @@ class ContestantShiroView(generics.RetrieveAPIView):
         return contestant.shiroid
 
 class KumiteListView(generics.ListAPIView):
-    queryset = Kumite.objects.all()
+    queryset = Kumite.objects.all().order_by('kumiteorder')
     serializer_class = KumiteSerializer
 
 class KumiteView(generics.RetrieveAPIView):
@@ -114,6 +114,32 @@ class KumitetournamentGroupView(generics.ListAPIView):
         idgroup = self.kwargs['idgroup']
         return Kumitetournament.objects.filter(idgroup=idgroup)
 
+def TatamiListView(request):
+    tatamis = Tatami.objects.all().filter(isactive=True)
+    result = []
+    for tatami in tatamis:
+        ktour = Kumitetournament.objects.filter(id=tatami.idkumitetournament_id)
+        fight_no = -1
+        if ktour:
+            fight_no = int(ktour[0].orderno / 10)
+        tatami_data = {
+                'id': tatami.id,
+                'isactive': tatami.isactive,
+                'isactivekumite': tatami.isactivekumite,
+                'isactivekata': tatami.isactivekata,
+                'stage': tatami.stage,
+                'prefix': tatami.prefix,
+                'kumiteno': tatami.kumiteno,
+                'description': tatami.description,
+                'issemifinalsactive': tatami.issemifinalsactive,
+                'isfinalsactive': tatami.isfinalsactive,
+                'idcontestantkata': tatami.idcontestantkata_id,
+                'idkumitetournament': tatami.idkumitetournament_id,
+                'fightno' : fight_no, 
+            }
+        result.append(tatami_data)
+    return JsonResponse(result, safe=False)
+
 
 def contestant_kumite_status_view(request, iddojo):
     # Prefetch related kumite tournaments with status 0
@@ -163,7 +189,8 @@ def contestant_kumite_status_view(request, iddojo):
         else:
             for kumite in aka_kumite:
                 opponent = kumite.shiroid_id
-                opponent_name = kumite.shiroid.firstname + " " + kumite.shiroid.lastname
+                if opponent != 0:
+                    opponent_name = kumite.shiroid.firstname + " " + kumite.shiroid.lastname
                 contestant_data = {
                     'id': contestant.id,
                     'iddojo': contestant.iddojo_id,
@@ -185,7 +212,8 @@ def contestant_kumite_status_view(request, iddojo):
                 result.append(contestant_data)
             for kumite in shiro_kumite:
                 opponent = kumite.akaid_id
-                opponent_name = kumite.akaid.firstname + " " + kumite.akaid.lastname
+                if opponent != 0:
+                    opponent_name = kumite.akaid.firstname + " " + kumite.akaid.lastname
                 contestant_data = {
                     'id': contestant.id,
                     'iddojo': contestant.iddojo_id,

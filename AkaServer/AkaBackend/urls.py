@@ -3,7 +3,7 @@ from django.urls import path
 from AkaBackend.views import *
 
 urlpatterns = [
-    path("tatami", TatamiListView.as_view(), name='tatami-list'),
+    path("tatami", TatamiListView, name='tatami-list'),
     path("setup", SetupListView.as_view(), name='setup-list'),
 
     #path("kata", KataListView.as_view(), name='kata-list'), TODO kata całość

@@ -50,7 +50,7 @@ const Contestants = ({ dojo_id }) => {
         .map(fighter => (
             {...fighter, 
                 tatami : fighter["entityno"][0], 
-                fights_left: parseInt(fighter.orderno/10) - (tatamis.filter(tatami=>tatami.prefix == fighter["entityno"][0])[0].idkumitetournament)}))
+                fights_left: parseInt(fighter.orderno/10) - (tatamis.filter(tatami=>tatami.prefix == fighter["entityno"][0])[0].fightno)}))
         .sort((a, b) => a.fights_left - b.fights_left)
     return (
         <>
