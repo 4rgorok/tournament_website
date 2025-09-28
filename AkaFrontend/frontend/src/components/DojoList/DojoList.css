@@ -1,0 +1,51 @@
+.club-results{
+    color: white;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: black;
+    border: 1px solid #ddd;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+.club-result-item{
+    color: white;
+    padding: 12px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+}
+
+.club-result-item:hover {
+  background-color: darkslategrey;
+}
+
+.club-result-item:last-child {
+  border-bottom: none;
+}
+
+.no-results{
+    color:white;
+    padding: 12px;
+    color: #666;
+    font-style: italic;
+}
+
+.club-selector {
+  position: relative;
+  max-width: 400px;
+  margin: 20px auto;
+}
+
+.club-search-input {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  box-sizing: border-box;
+}

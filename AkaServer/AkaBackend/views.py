@@ -1,92 +1,237 @@
 from rest_framework.views import APIView
+from rest_framework import viewsets, generics, status
 from rest_framework.response import Response
+from django.db.models import Q, Prefetch
+from django.http import JsonResponse
 from .models import *
 from .serializers import *
 
-class TatamiListView(APIView):
-    def get(self, request):
-        items = Tatami.objects.all().filter(isactive=True)
-        serializer = TatamiSerializer(items, many=True)
-        return Response(serializer.data)
-    
-class ContestantListView(APIView):
-    def get(self, request):
-        items = Contestant.objects.all()
-        if 'id' in request.GET:
-            id=request.GET['id']
-            items = Contestant.objects.all().filter(id=id)
-        elif 'fid' in request.GET:
-            fid = request.GET['fid']
-            type = request.GET['type']
-            uid = 0
-            if type == '0':
-                uid = Kumitetournament.objects.get(id=fid).akaid
-            else:
-                uid = Kumitetournament.objects.get(id=fid).shiroid
-            items = Contestant.objects.filter(id=uid)
-        serializer = ContestantSerializer(items, many=True)
-        return Response(serializer.data)
-    
-class KataListView(APIView):
-    def get(self, request):
-        items = Kata.objects.all()
+#class TatamiListView(generics.ListAPIView):
+#    queryset = Tatami.objects.all().filter(isactive=True).select_related('idkumitetournament')
+#    serializer_class = TatamiSerializer
 
-        if 'uid' in request.GET:
-            uid = request.GET['uid']
-            user = Contestant.objects.get(id=uid).idkatagroup
-            items = Kata.objects.filter(id=user)
-        elif 'id' in request.GET:
-            id = request.GET['id']
-            items = Kata.objects.all().filter(id=id)
+class ContestantListView(generics.ListAPIView):
+    queryset = Contestant.objects.all()
+    serializer_class = ContestantSerializer
 
-        serializer = KataSerializer(items, many=True)
-        return Response(serializer.data)
+class FighterByDojoView(generics.ListAPIView):
+    serializer_class = ContestantSerializer
+    def get_queryset(self):
+        iddojo = self.kwargs['iddojo']
+        return Contestant.objects.filter(kumite = True).filter(iddojo=iddojo)
+
+class ContestantView(generics.RetrieveAPIView):
+    queryset = Contestant.objects.all()
+    serializer_class = ContestantSerializer
+    lookup_field = 'id'
+    def get_object(self):
+        contestant = super().get_object()
+        return contestant
+
+class ContestantAkaView(generics.RetrieveAPIView):
+    queryset = Kumitetournament.objects.all()
+    serializer_class = ContestantSerializer
+    lookup_field = 'id'
+    def get_object(self):
+        contestant = super().get_object()
+        return contestant.akaid
+
+class ContestantShiroView(generics.RetrieveAPIView):
+    queryset = Kumitetournament.objects.all()
+    serializer_class = ContestantSerializer
+    lookup_field = 'id'
+    def get_object(self):
+        contestant = super().get_object()
+        return contestant.shiroid
+
+class KumiteListView(generics.ListAPIView):
+    queryset = Kumite.objects.all().order_by('kumiteorder')
+    serializer_class = KumiteSerializer
+
+class KumiteView(generics.RetrieveAPIView):
+    queryset = Kumite.objects.all()
+    serializer_class = KumiteSerializer
+    lookup_field = 'id'
+    def get_object(self):
+        group = super().get_object()
+        return group
+
+class KumiteFightView(generics.RetrieveAPIView):
+    queryset = Kumitetournament.objects.all()
+    serializer_class = KumiteSerializer
+    lookup_field = 'id'
+    def get_object(self):
+        group = super().get_object()
+        return group.idgroup
+
+class DojoListView(generics.ListAPIView):
+    queryset = Dojo.objects.all()
+    serializer_class = DojoSerializer
+
+class DojoView(generics.RetrieveAPIView):
+    queryset = Dojo.objects.all()
+    serializer_class = DojoSerializer
+    lookup_field = 'id'
+    def get_object(self):
+        dojo = super().get_object()
+        return dojo
+
+class DojoContestantView(generics.RetrieveAPIView):
+    queryset = Contestant.objects.all()
+    serializer_class = DojoSerializer
+    lookup_field = 'id'
+    def get_object(self):
+        contestant = super().get_object()
+        return contestant.iddojo
+
+class DojoAkaView(generics.RetrieveAPIView):
+    queryset = Kumitetournament.objects.all()
+    serializer_class = DojoSerializer
+    lookup_field = 'id'
+    def get_object(self):
+        fight = super().get_object()
+        return fight.akaid.iddojo
+
+class DojoShiroView(generics.RetrieveAPIView):
+    queryset = Kumitetournament.objects.all()
+    serializer_class = DojoSerializer
+    lookup_field = 'id'
+    def get_object(self):
+        fight = super().get_object()
+        return fight.shiroid.iddojo
     
-class KumiteListView(APIView):
-    def get(self, request):
-        items = Kumite.objects.all()
+class SetupListView(generics.ListAPIView):
+    queryset = Setup.objects.all()
+    serializer_class = SetupSerializer
 
-        if 'uid' in request.GET:
-            uid = request.GET['uid']
-            user = Contestant.objects.get(id=uid).idkumitegroup
-            items = Kumite.objects.filter(id=user)
-        elif 'fid' in request.GET:
-            fid = request.GET['fid']
-            fight = Kumitetournament.objects.get(id=fid).idgroup
-            items = Kumite.objects.filter(id=fight)
-        elif 'id' in request.GET:
-            id = request.GET['id']
-            items = Kumite.objects.all().filter(id=id)
+class KumitetournamentListView(generics.ListAPIView):
+    queryset = Kumitetournament.objects.all()
+    serializer_class = KumitetournamentSerializer
 
-        serializer = KumiteSerializer(items, many=True)
-        return Response(serializer.data)
+class KumitetournamentGroupView(generics.ListAPIView):
+    serializer_class = KumitetournamentSerializer
+    def get_queryset(self):
+        idgroup = self.kwargs['idgroup']
+        return Kumitetournament.objects.filter(idgroup=idgroup)
+
+def TatamiListView(request):
+    tatamis = Tatami.objects.all().filter(isactive=True)
+    result = []
+    for tatami in tatamis:
+        ktour = Kumitetournament.objects.filter(id=tatami.idkumitetournament_id)
+        fight_no = -1
+        if ktour:
+            fight_no = int(ktour[0].orderno / 10)
+        tatami_data = {
+                'id': tatami.id,
+                'isactive': tatami.isactive,
+                'isactivekumite': tatami.isactivekumite,
+                'isactivekata': tatami.isactivekata,
+                'stage': tatami.stage,
+                'prefix': tatami.prefix,
+                'kumiteno': tatami.kumiteno,
+                'description': tatami.description,
+                'issemifinalsactive': tatami.issemifinalsactive,
+                'isfinalsactive': tatami.isfinalsactive,
+                'idcontestantkata': tatami.idcontestantkata_id,
+                'idkumitetournament': tatami.idkumitetournament_id,
+                'fightno' : fight_no, 
+            }
+        result.append(tatami_data)
+    return JsonResponse(result, safe=False)
+
+
+def contestant_kumite_status_view(request, iddojo):
+    # Prefetch related kumite tournaments with status 0
+    kumite_prefetch = Prefetch(
+        'kumitetournament_set',
+        queryset=Kumitetournament.objects.filter(kumitestatus=0),
+        to_attr='active_kumite_aka'
+    )
     
-class DojoListView(APIView):
-    def get(self, request):
-        items = Dojo.objects.all()
-        if 'fid' in request.GET:
-            fid = request.GET['fid']
-            type = request.GET['type']
-            uid = 0
-            if type == '0':
-                uid = Kumitetournament.objects.get(id=fid).akaid
-            else:
-                uid = Kumitetournament.objects.get(id=fid).shiroid
-            user = Contestant.objects.get(id=uid).iddojo
-            items = Dojo.objects.filter(id=user)
-        if 'uid' in request.GET:
-            uid = request.GET['uid']
-            user = Contestant.objects.get(id=uid).iddojo
-            items = Dojo.objects.filter(id=user)
-        elif 'id' in request.GET:
-            id = request.GET['id']
-            items = Dojo.objects.all().filter(id=id)
+    kumite_prefetch_shiro = Prefetch(
+        'kumitetournament_shiroid_set',
+        queryset=Kumitetournament.objects.filter(kumitestatus=0),
+        to_attr='active_kumite_shiro'
+    )
 
-        serializer = DojoSerializer(items, many=True)
-        return Response(serializer.data)
-    
-class SetupListView(APIView):
-    def get(self, request):
-        items = Setup.objects.all()
-        serializer = SetupSerializer(items, many=True)
-        return Response(serializer.data)
+    # Filter contestants by dojo ID
+    contestants = Contestant.objects.filter(kumite=True).filter(iddojo=iddojo).prefetch_related(
+        kumite_prefetch, kumite_prefetch_shiro
+    )
+
+    result = []
+    for contestant in contestants:
+        # Check if contestant has active kumite as aka
+        aka_kumite = contestant.active_kumite_aka
+        shiro_kumite = contestant.active_kumite_shiro
+        kumite_data = None
+        role = 'none'
+        opponent = -1
+        opponent_name = ""
+        
+        kumite_data = aka_kumite + shiro_kumite
+        kumite_data.sort(key=lambda x: x.orderno)
+
+        if not kumite_data:
+            contestant_data = {
+                'id': contestant.id,
+                'iddojo': contestant.iddojo_id,
+                'contestantnumber': contestant.contestantnumber,
+                'gender': contestant.gender,
+                'lastname': contestant.lastname,
+                'firstname': contestant.firstname,
+                'role': role,
+                'opponent': opponent,
+                'opponent_name': opponent_name,
+            }
+            result.append(contestant_data)
+        else:
+            for kumite in aka_kumite:
+                opponent = kumite.shiroid_id
+                if opponent != 0:
+                    opponent_name = kumite.shiroid.firstname + " " + kumite.shiroid.lastname
+                contestant_data = {
+                    'id': contestant.id,
+                    'iddojo': contestant.iddojo_id,
+                    'contestantnumber': contestant.contestantnumber,
+                    'gender': contestant.gender,
+                    'lastname': contestant.lastname,
+                    'firstname': contestant.firstname,
+                    'role': "aka",
+                    'opponent': opponent,
+                    'opponent_name': opponent_name,
+                    'fightno': kumite.fightno,
+                    'idgroup_id': kumite.idgroup_id,
+                    'entityno': kumite.entityno,
+                    'orderno': kumite.orderno,
+                    'kumite_id': kumite.id,
+                    'level': kumite.leveltxt,
+                    'g3':kumite.g3,
+                }
+                result.append(contestant_data)
+            for kumite in shiro_kumite:
+                opponent = kumite.akaid_id
+                if opponent != 0:
+                    opponent_name = kumite.akaid.firstname + " " + kumite.akaid.lastname
+                contestant_data = {
+                    'id': contestant.id,
+                    'iddojo': contestant.iddojo_id,
+                    'contestantnumber': contestant.contestantnumber,
+                    'gender': contestant.gender,
+                    'lastname': contestant.lastname,
+                    'firstname': contestant.firstname,
+                    'role': "shiro",
+                    'opponent': opponent,
+                    'opponent_name': opponent_name,
+                    'fightno': kumite.fightno,
+                    'idgroup_id': kumite.idgroup_id,
+                    'entityno': kumite.entityno,
+                    'orderno': kumite.orderno,
+                    'kumite_id': kumite.id,
+                    'level': kumite.leveltxt,
+                    'g3':kumite.g3,
+                }
+                result.append(contestant_data)
+
+    return JsonResponse(result, safe=False)

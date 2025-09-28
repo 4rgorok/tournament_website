@@ -30,3 +30,8 @@ class SetupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Setup
         fields = "__all__"
+
+class KumitetournamentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Kumitetournament
+        fields = "__all__"

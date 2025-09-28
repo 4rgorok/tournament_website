@@ -4,3 +4,10 @@ h1.turniej {
     cursor:default;
     user-select: none;
 }
+
+h2.turniej {
+    margin-top: 4vh;
+    color: white;
+    cursor:default;
+    user-select: none;
+}
